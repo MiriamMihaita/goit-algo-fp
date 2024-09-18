@@ -1,0 +1,76 @@
+import turtle
+import math
+
+# Function to draw a square
+def draw_square(t, side_length):
+    for _ in range(4):
+        t.forward(side_length)
+        t.right(90)
+
+# Recursive function to draw the Pythagorean Tree
+def draw_pythagorean_tree(t, length, depth, angle):
+    if depth == 0:
+        draw_square(t, length)
+        return
+
+    # Draw the base square
+    draw_square(t, length)
+
+    # Move to the top left corner of the square
+    t.forward(length)
+    t.left(90)
+    t.forward(length)
+    t.right(90)
+
+    # Draw the left subtree
+    t.left(angle)
+    new_length = length * math.sqrt(2) / 2
+    draw_pythagorean_tree(t, new_length, depth - 1, angle)
+    t.right(angle)
+
+    # Move to the top right corner of the square
+    t.left(90)
+    t.forward(length)
+    t.right(90)
+    t.forward(length)
+
+    # Draw the right subtree
+    t.right(angle)
+    draw_pythagorean_tree(t, new_length, depth - 1, angle)
+    t.left(angle)
+
+    # Return to the original position
+    t.right(90)
+    t.forward(length)
+    t.right(90)
+    t.forward(length)
+    t.left(180)
+
+# Main function to set up the turtle and draw the fractal
+def main():
+    # Set up the turtle
+    t = turtle.Turtle()
+    t.speed(0)  # Set the speed to the maximum
+    screen = turtle.Screen()
+    screen.bgcolor("white")
+
+    # Set the angle for the branches
+    angle = 45
+
+    # Allow the user to specify the depth of recursion
+    depth = int(screen.textinput("Recursion Level", "Enter the depth of recursion (e.g., 5):"))
+
+    # Move to a starting position
+    t.penup()
+    t.goto(-50, -100)
+    t.pendown()
+
+    # Draw the Pythagorean Tree
+    draw_pythagorean_tree(t, 100, depth, angle)
+
+    # Keep the window open
+    screen.mainloop()
+
+if __name__ == "__main__":
+    main()
+    

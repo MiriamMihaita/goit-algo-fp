@@ -1,0 +1,59 @@
+import heapq
+
+# Function to implement Dijkstra's algorithm
+def dijkstra(graph, start_vertex):
+    # Initialize the distances dictionary with infinity for all nodes except the start node
+    distances = {vertex: float('infinity') for vertex in graph}
+    distances[start_vertex] = 0
+
+    # Priority queue to store the vertices to be explored
+    priority_queue = [(0, start_vertex)]  # (distance, vertex)
+
+    while priority_queue:
+        # Pop the vertex with the smallest distance
+        current_distance, current_vertex = heapq.heappop(priority_queue)
+
+        # If the popped vertex distance is greater than the recorded distance, continue
+        if current_distance > distances[current_vertex]:
+            continue
+
+        # Explore neighbors
+        for neighbor, weight in graph[current_vertex]:
+            distance = current_distance + weight
+
+            # If the calculated distance is less, update the distance and add to the queue
+            if distance < distances[neighbor]:
+                distances[neighbor] = distance
+                heapq.heappush(priority_queue, (distance, neighbor))
+
+    return distances
+
+# Function to create a sample graph
+def create_graph():
+    graph = {
+        'A': [('B', 1), ('C', 4)],
+        'B': [('A', 1), ('C', 2), ('D', 5)],
+        'C': [('A', 4), ('B', 2), ('D', 1)],
+        'D': [('B', 5), ('C', 1)]
+    }
+    return graph
+
+# Main function to run the algorithm
+def main():
+    # Create a graph
+    graph = create_graph()
+
+    # Specify the starting vertex
+    start_vertex = 'A'
+
+    # Run Dijkstra's algorithm
+    shortest_paths = dijkstra(graph, start_vertex)
+
+    # Print the shortest paths from the start vertex to all other vertices
+    print("Shortest paths from vertex", start_vertex)
+    for vertex, distance in shortest_paths.items():
+        print(f"Vertex {vertex}: {distance}")
+
+if __name__ == "__main__":
+    main()
+    
